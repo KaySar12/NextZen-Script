@@ -49,7 +49,7 @@ UNAME_M="$(uname -m)"
 readonly UNAME_M
 
 readonly NEXTZEN_UNINSTALL_URL="https://setup.nextzen.cstsoft.net/1.0/uninstall.sh"
-readonly BACKUP_UNINSTALL_URL="https://get.casaos.io/uninstall"
+readonly BACKUP_UNINSTALL_URL="https://raw.githubusercontent.com/KaySar12/NextZen-Script/master/uninstall.sh"
 readonly NEXTZEN_UNINSTALL_PATH=/usr/bin/nextzenos-uninstall
 
 # REQUIREMENTS CONF PATH
