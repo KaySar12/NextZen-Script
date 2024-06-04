@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/usr/bin/bash 
 #
 #           NextZenOS Installer Script v1.0
 #   Requires: bash, mv, rm, tr, grep, sed, curl/wget, tar, smartmontools, parted, ntfs-3g, net-tools
@@ -6,9 +6,9 @@
 #   This script installs NextZenOS to your system.
 #   Usage:
 #
-#   	$ wget -qO- https://dl.nextzenos.com/| bash
+#   	$ wget -qO- https://setup.nextzen.cstsoft.net/ | bash
 #   	  or
-#   	$ curl -fsSL https://dl.nextzenos.com/ | bash
+#   	$ curl -fsSL https://setup.nextzen.cstsoft.net/ | bash
 #
 #   In automated environments, you may want to run as root.
 #   If using curl, we recommend using the -fsSL flags.
@@ -70,8 +70,7 @@ UNAME_U="$(uname -s)"
 readonly UNAME_U
 
 readonly NEXTZEN_CONF_PATH=/etc/casaos/gateway.ini
-readonly NEXTZEN_UNINSTALL_URL="https://dl.nextzenos.com/setup/nextzenos/1.0/uninstall.sh"
-readonly BACKUP_UNINSTALL_URL="https://raw.githubusercontent.com/KaySar12/NextZen-Script/master/uninstall.sh"
+readonly NEXTZEN_UNINSTALL_URL="https://setup.nextzen.cstsoft.net/1.0/uninstall.sh"
 readonly NEXTZEN_UNINSTALL_PATH=/usr/bin/nextzenos-uninstall
 
 # REQUIREMENTS CONF PATH
@@ -97,8 +96,8 @@ readonly GREEN_SEPARATOR="${aCOLOUR[0]}:$COLOUR_RESET"
 TARGET_ARCH=""
 TMP_ROOT=/tmp/casaos-installer
 REGION="UNKNOWN"
-GITHUB_DOWNLOAD_DOMAIN="https://github.com/"
-NEXTZEN_DOWNLOAD_DOMAIN="https://dl.nextzenos.com/"
+NEXTZEN_DOWNLOAD_DOMAIN="https://github.com/"
+
 trap 'onCtrlC' INT
 onCtrlC() {
     echo -e "${COLOUR_RESET}"
@@ -190,7 +189,7 @@ Get_Download_Url_Domain() {
     fi
 }
 
-# 1 Check Archclient_iduip
+# 1 Check Arch
 Check_Arch() {
     case $UNAME_M in
     *aarch64*)
@@ -209,21 +208,18 @@ Check_Arch() {
     esac
     Show 0 "Your hardware architecture is : $UNAME_M"
     NEXTZEN_PACKAGES=(
-        "${GITHUB_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-Gateway/releases/download/v0.4.8-alpha2/linux-${TARGET_ARCH}-casaos-gateway-v0.4.8-alpha2.tar.gz"
-        "${GITHUB_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-MessageBus/releases/download/v0.4.4-3-alpha2/linux-${TARGET_ARCH}-casaos-message-bus-v0.4.4-3-alpha2.tar.gz"
-        "${GITHUB_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-UserService/releases/download/v0.4.8/linux-${TARGET_ARCH}-casaos-user-service-v0.4.8.tar.gz"
-        "${GITHUB_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-LocalStorage/releases/download/v0.4.4/linux-${TARGET_ARCH}-casaos-local-storage-v0.4.4.tar.gz"
-        # "${GITHUB_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-AppManagement/releases/download/v0.4.9-alpha1/linux-${TARGET_ARCH}-casaos-app-management-v0.4.9-alpha1.tar.gz"
-        "${GITHUB_DOWNLOAD_DOMAIN}KaySar12/CasaOS-AppManagement/releases/download/1.0.0/linux-arm64-nextzen-app-management-v1.0.0.tar.gz"
-        #Main service
-        "${GITHUB_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS/releases/download/v0.4.9/linux-${TARGET_ARCH}-casaos-v0.4.9.tar.gz"
-        # "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.0/Release/linux-amd64-nextzen-v1.0.0.tar.gz"
-        "${GITHUB_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-CLI/releases/download/v0.4.4-3-alpha1/linux-${TARGET_ARCH}-casaos-cli-v0.4.4-3-alpha1.tar.gz"
-        #Nextzen-UI
-        "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.0/Release/linux-amd64-nextzenui-v1.1.0.tar.gz"
-        "${GITHUB_DOWNLOAD_DOMAIN}KaySar12/CasaOS-AppStore/releases/download/1.0.0/linux-all-appstore-v0.0.3.tar.gz"
+        "${NEXTZEN_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-Gateway/releases/download/v0.4.4-3-alpha5/linux-${TARGET_ARCH}-casaos-gateway-v0.4.4-3-alpha5.tar.gz"
+        "${NEXTZEN_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-MessageBus/releases/download/v0.4.4-3-alpha2/linux-${TARGET_ARCH}-casaos-message-bus-v0.4.4-3-alpha2.tar.gz"
+        "${NEXTZEN_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-UserService/releases/download/v0.4.5/linux-${TARGET_ARCH}-casaos-user-service-v0.4.5.tar.gz"
+        "${NEXTZEN_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-LocalStorage/releases/download/v0.4.4/linux-${TARGET_ARCH}-casaos-local-storage-v0.4.4.tar.gz"
+        "${NEXTZEN_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-AppManagement/releases/download/v0.4.5/linux-${TARGET_ARCH}-casaos-app-management-v0.4.5.tar.gz"
+        "${NEXTZEN_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS/releases/download/v0.4.6/linux-${TARGET_ARCH}-casaos-v0.4.6.tar.gz"
+        "${NEXTZEN_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-CLI/releases/download/v0.4.4-3-alpha1/linux-${TARGET_ARCH}-casaos-cli-v0.4.4-3-alpha1.tar.gz"
+        "${NEXTZEN_DOWNLOAD_DOMAIN}KaySar12/CasaOS-UI/releases/download/1.0.5/linux-all-nextzen-v1.0.7.tar.gz"
+        "${NEXTZEN_DOWNLOAD_DOMAIN}KaySar12/CasaOS-AppStore/releases/download/1.0.0/linux-all-appstore-v1.0.0.tar.gz"
     )
 }
+
 # PACKAGE LIST OF CASAOS (make sure the services are in the right order)
 NEXTZEN_SERVICES=(
     "casaos-gateway.service"
@@ -395,25 +391,7 @@ Install_Depends() {
         fi
     done
 }
-# Function to check if a URL is valid
-check_url() {
-    curl --silent --head --write-out '%{http_code}\n' --output /dev/null "$1"
-}
-# Function to uninstall Nextzen
-setup_uninstall_nextzen() {
-    echo "Trying Primary URL..."
-    if ! check_url "$NEXTZEN_UNINSTALL_URL"; then
-        echo "Primary URL is not working, trying backup URL..."
-        if check_url "$BACKUP_UNINSTALL_URL"; then
-            curl -fsSLk "$BACKUP_UNINSTALL_URL" >"${PREFIX}/tmp/nextzenos-uninstall"
-        else
-            echo "Backup URL is also not working, cannot uninstall Nextzen."
-            return 1
-        fi
-    else
-        curl -fsSLk "$NEXTZEN_UNINSTALL_URL" >"${PREFIX}/tmp/nextzenos-uninstall"
-    fi
-}
+
 Check_Dependency_Installation() {
     for ((i = 0; i < ${#NEXTZEN_DEPANDS_COMMAND[@]}; i++)); do
         cmd=${NEXTZEN_DEPANDS_COMMAND[i]}
@@ -638,15 +616,13 @@ DownloadAndInstallNextzenOS() {
         ${sudo_cmd} chmod +x $UI_EVENTS_REG_SCRIPT
     fi
     # Modify app store configuration
-    #!important
-    # ${sudo_cmd} sed -i "s#https://github.com/IceWhaleTech/_appstore/#${NEXTZEN_DOWNLOAD_DOMAIN}IceWhaleTech/_appstore/#g" "$PREFIX/etc/casaos/app-management.conf"
-    ${sudo_cmd} sed -i "s#https://github.com/IceWhaleTech/_appstore/archive/refs/heads/main.zip#https://github.com/KaySar12/CasaOS-AppStore/releases/download/1.0.0/_appstore-main.zip#g" "$PREFIX/etc/casaos/app-management.conf"
+    ${sudo_cmd} sed -i "s#https://github.com/IceWhaleTech/_appstore/#${NEXTZEN_DOWNLOAD_DOMAIN}IceWhaleTech/_appstore/#g" "$PREFIX/etc/casaos/app-management.conf"
+
     #Download Uninstall Script
     if [[ -f $PREFIX/tmp/nextzenos-uninstall ]]; then
         ${sudo_cmd} rm -rf "$PREFIX/tmp/nextzenos-uninstall"
     fi
-    # ${sudo_cmd} curl -fsSLk "$NEXTZEN_UNINSTALL_URL" >"$PREFIX/tmp/nextzenos-uninstall"
-    setup_uninstall_nextzen
+    ${sudo_cmd} curl -fsSLk "$NEXTZEN_UNINSTALL_URL" >"$PREFIX/tmp/nextzenos-uninstall"
     ${sudo_cmd} cp -rf "$PREFIX/tmp/nextzenos-uninstall" $NEXTZEN_UNINSTALL_PATH || {
         Show 1 "Download uninstall script failed, Please check if your internet connection is working and retry."
         exit 1

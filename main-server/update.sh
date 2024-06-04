@@ -70,8 +70,7 @@ readonly aCOLOUR=(
 # CASAOS VARIABLES
 TARGET_ARCH=""
 TMP_ROOT=/tmp/casaos-installer
-GITHUB_DOWNLOAD_DOMAIN="https://github.com/"
-NEXTZEN_DOWNLOAD_DOMAIN="https://dl.nextzenos.com/"
+NEXTZEN_DOWNLOAD_DOMAIN="https://github.com/"
 
 # PACKAGE LIST OF CASAOS
 NEXTZEN_SERVICES=(
@@ -194,15 +193,15 @@ Check_Arch() {
     esac
     Show 0 "Your hardware architecture is : $UNAME_M"
     NEXTZEN_PACKAGES=(
-        "${GITHUB_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-Gateway/releases/download/v0.4.8-alpha2/linux-${TARGET_ARCH}-casaos-gateway-v0.4.8-alpha2.tar.gz"
-        "${GITHUB_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-MessageBus/releases/download/v0.4.4-3-alpha2/linux-${TARGET_ARCH}-casaos-message-bus-v0.4.4-3-alpha2.tar.gz"
-        "${GITHUB_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-UserService/releases/download/v0.4.8/linux-${TARGET_ARCH}-casaos-user-service-v0.4.8.tar.gz"
-        "${GITHUB_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-LocalStorage/releases/download/v0.4.4/linux-${TARGET_ARCH}-casaos-local-storage-v0.4.4.tar.gz"
-        "${GITHUB_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-AppManagement/releases/download/v0.4.9-alpha1/linux-${TARGET_ARCH}-casaos-app-management-v0.4.9-alpha1.tar.gz"
-        "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.1/Release/linux-amd64-nextzen-v1.1.0.tar.gz"
-        "${GITHUB_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-CLI/releases/download/v0.4.4-3-alpha1/linux-${TARGET_ARCH}-casaos-cli-v0.4.4-3-alpha1.tar.gz"
-        "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.1/Release/linux-all-nextzen-v1.1.0.tar.gz"
-        "${GITHUB_DOWNLOAD_DOMAIN}KaySar12/CasaOS-AppStore/releases/download/1.0.0/linux-all-appstore-v1.0.0.tar.gz"
+        "${NEXTZEN_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-Gateway/releases/download/v0.4.4-3-alpha5/linux-${TARGET_ARCH}-casaos-gateway-v0.4.4-3-alpha5.tar.gz"
+        "${NEXTZEN_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-MessageBus/releases/download/v0.4.4-3-alpha2/linux-${TARGET_ARCH}-casaos-message-bus-v0.4.4-3-alpha2.tar.gz"
+        "${NEXTZEN_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-UserService/releases/download/v0.4.5/linux-${TARGET_ARCH}-casaos-user-service-v0.4.5.tar.gz"
+        "${NEXTZEN_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-LocalStorage/releases/download/v0.4.4/linux-${TARGET_ARCH}-casaos-local-storage-v0.4.4.tar.gz"
+        "${NEXTZEN_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-AppManagement/releases/download/v0.4.5/linux-${TARGET_ARCH}-casaos-app-management-v0.4.5.tar.gz"
+        "${NEXTZEN_DOWNLOAD_DOMAIN}KaySar12/CasaOS/releases/download/test-new-version/linux-amd64-casaos-v1.1.tar.gz"
+        "${NEXTZEN_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-CLI/releases/download/v0.4.4-3-alpha1/linux-${TARGET_ARCH}-casaos-cli-v0.4.4-3-alpha1.tar.gz"
+        "${NEXTZEN_DOWNLOAD_DOMAIN}KaySar12/CasaOS-UI/releases/download/1.0.5/linux-all-nextzen-v1.0.7.tar.gz"
+        "${NEXTZEN_DOWNLOAD_DOMAIN}KaySar12/CasaOS-AppStore/releases/download/1.0.0/linux-all-appstore-v1.0.0.tar.gz"
     )
 }
 

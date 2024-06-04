@@ -12,7 +12,7 @@ echo '
    --- Power by NextZEN ---
 '
 ((EUID)) && sudo_cmd="sudo"
-SERVICES=(
+CASA_SERVICES=(
   "casaos-gateway.service"
   "casaos-message-bus.service"
   "casaos-user-service.service"
@@ -34,8 +34,6 @@ readonly aCOLOUR=(
 readonly GREEN_LINE=" ${aCOLOUR[0]}─────────────────────────────────────────────────────$COLOUR_RESET"
 readonly GREEN_BULLET=" ${aCOLOUR[0]}-$COLOUR_RESET"
 readonly GREEN_SEPARATOR="${aCOLOUR[0]}:$COLOUR_RESET"
-NEXTZEN_DOWNLOAD_DOMAIN="https://dl.nextzenos.com"
-CASAOS_DOWNLOAD_DOMAIN="https://get.casaos.io"
 Show() {
   # OK
   if (($1 == 0)); then
@@ -53,7 +51,7 @@ Show() {
   fi
 }
 stop() {
-  for SERVICE in "${SERVICES[@]}"; do
+  for SERVICE in "${CASA_SERVICES[@]}"; do
     Show 2 "Stopping ${SERVICE}..."
 
     ${sudo_cmd} systemctl stop "${SERVICE}" || Show 3 "Service ${SERVICE} does not exist."
@@ -63,7 +61,7 @@ stop() {
 }
 
 restart() {
-  for SERVICE in "${SERVICES[@]}"; do
+  for SERVICE in "${CASA_SERVICES[@]}"; do
     Show 2 "restart ${SERVICE}..."
 
     ${sudo_cmd} systemctl restart "${SERVICE}" || Show 3 "Service ${SERVICE} does not exist."
@@ -102,41 +100,8 @@ install() {
   echo "Enter Version:"
   read -r version </dev/tty
 
-  if curl -fsSL "${NEXTZEN_DOWNLOAD_DOMAIN}/setup/nextzenos/$version/install.sh" >/dev/null 2>&1; then
-    echo "valid version. Installing nextzenos $version"
-    curl -fsSL "${NEXTZEN_DOWNLOAD_DOMAIN}/setup/nextzenos/$version/install.sh" | ${sudo_cmd} bash
-  else
-    echo "Invalid version. Please enter a valid version number."
-  fi
-}
-installCasa() {
-  echo "Enter Version:"
-  read -r version </dev/tty
-  if curl -fsSL "${CASAOS_DOWNLOAD_DOMAIN}/install/v$version" >/dev/null 2>&1; then
-    echo "valid version. Installing casaos v$version..."
-    curl -fsSL "${CASAOS_DOWNLOAD_DOMAIN}/install/v$version" | ${sudo_cmd} bash
-  else
-    echo "Invalid version. Please enter a valid version number."
-  fi
-}
-update() {
-  echo "Enter Version:"
-  read -r version </dev/tty
-  if curl -fsSL "${NEXTZEN_DOWNLOAD_DOMAIN}/setup/nextzenos/$version/update.sh" >/dev/null 2>&1; then
-    echo "valid version. Updating nextzen $version"
-    curl -fsSL "${NEXTZEN_DOWNLOAD_DOMAIN}/setup/nextzenos/$version/update.sh" | ${sudo_cmd} bash
-  else
-    echo "Invalid version. Please enter a valid version number."
-  fi
-}
-
-updateCasa() {
-  echo "Enter Version:"
-  read -r version </dev/tty
-
-  if curl -fsSL "${CASAOS_DOWNLOAD_DOMAIN}/update/v$version" >/dev/null 2>&1; then
-    echo "valid version. Updating casaos v$version"
-    curl -fsSL "${CASAOS_DOWNLOAD_DOMAIN}/update/v$version" | ${sudo_cmd} bash
+  if curl -fsSL "https://dl.nextzenos.com/setup/nextzenos/$version/scripts/install.sh" >/dev/null 2>&1; then
+    curl -fsSL "https://dl.nextzenos.com/setup/nextzenos/$version/scripts/install.sh" | ${sudo_cmd} bash
   else
     echo "Invalid version. Please enter a valid version number."
   fi
@@ -145,24 +110,16 @@ uninstall() {
   ${sudo_cmd} nextzenos-uninstall
   reload
 }
-uninstallCasa() {
-  ${sudo_cmd} casaos-uninstall
-  reload
-}
-log() {
-  #   sudo journalctl -xef -u ${service name}
-  echo "Enter Services name:"
+log(){
+#   sudo journalctl -xef -u ${service name}
+ echo "Enter Services name:"
   read -r service </dev/tty
-  ${sudo_cmd} journalctl -xef -u "$service"
+  ${sudo_cmd} journalctl -xef -u $service
 }
 main() {
   echo 'Options:
       install - install nextzenOS
       uninstall - uninstall nextzenOS
-      update - Update nextzenOS
-      installCasa - install casaOS
-      uninstallCasa - uninstall casaOS
-      updateCasa - update CasaOS
       1.stop all service
       2.stop a service
       3.start a service
@@ -183,22 +140,6 @@ main() {
   "uninstall")
     echo "Execute uninstall script"
     uninstall
-    ;;
-  "update")
-    echo "Execute update script"
-    update
-    ;;
-  "installCasa")
-    echo "Execute CasaOS install script"
-    installCasa
-    ;;
-  "uninstallCasa")
-    echo "Execute CasaOS uninstall script"
-    uninstallCasa
-    ;;
-  "updateCasa")
-    echo "Execute CasaOS update script"
-    updateCasa
     ;;
   "1")
     echo "Progressing"
