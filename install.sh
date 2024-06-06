@@ -45,8 +45,8 @@ source /etc/os-release
 readonly MINIMUM_DISK_SIZE_GB="5"
 readonly MINIMUM_MEMORY="400"
 readonly MINIMUM_DOCKER_VERSION="20"
-readonly NEXTZEN_DEPANDS_PACKAGE=('wget' 'curl' 'smartmontools' 'parted' 'ntfs-3g' 'net-tools' 'udevil' 'samba' 'cifs-utils' 'mergerfs' 'unzip')
-readonly NEXTZEN_DEPANDS_COMMAND=('wget' 'curl' 'smartctl' 'parted' 'ntfs-3g' 'netstat' 'udevil' 'smbd' 'mount.cifs' 'mount.mergerfs' 'unzip')
+readonly NEXTZEN_DEPENDS_PACKAGE=('wget' 'curl' 'smartmontools' 'parted' 'ntfs-3g' 'net-tools' 'udevil' 'samba' 'cifs-utils' 'mergerfs' 'unzip' 'dos2unix')
+readonly NEXTZEN_DEPENDS_COMMAND=('wget' 'curl' 'smartctl' 'parted' 'ntfs-3g' 'netstat' 'udevil' 'smbd' 'mount.cifs' 'mount.mergerfs' 'unzip' 'dos2unix')
 
 # SYSTEM INFO
 PHYSICAL_MEMORY=$(LC_ALL=C free -m | awk '/Mem:/ { print $2 }')
@@ -209,19 +209,21 @@ Check_Arch() {
     esac
     Show 0 "Your hardware architecture is : $UNAME_M"
     NEXTZEN_PACKAGES=(
-        "${GITHUB_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-Gateway/releases/download/v0.4.8-alpha2/linux-${TARGET_ARCH}-casaos-gateway-v0.4.8-alpha2.tar.gz"
-        "${GITHUB_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-MessageBus/releases/download/v0.4.4-3-alpha2/linux-${TARGET_ARCH}-casaos-message-bus-v0.4.4-3-alpha2.tar.gz"
-        "${GITHUB_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-UserService/releases/download/v0.4.8/linux-${TARGET_ARCH}-casaos-user-service-v0.4.8.tar.gz"
-        "${GITHUB_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-LocalStorage/releases/download/v0.4.4/linux-${TARGET_ARCH}-casaos-local-storage-v0.4.4.tar.gz"
+        "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.1/Release/linux-amd64-casaos-gateway-v0.4.8-alpha2.tar.gz"
+        "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.1/Release/linux-amd64-casaos-message-bus-v0.4.4-3-alpha2.tar.gz"
+        "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.1/Release/linux-amd64-casaos-user-service-v0.4.8.tar.gz"
+        "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.1/Release/linux-amd64-casaos-local-storage-v0.4.4.tar.gz"
+        "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.1/Release/linux-arm64-nextzen-app-management-v1.0.0.tar.gz"
         # "${GITHUB_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-AppManagement/releases/download/v0.4.9-alpha1/linux-${TARGET_ARCH}-casaos-app-management-v0.4.9-alpha1.tar.gz"
-        "${GITHUB_DOWNLOAD_DOMAIN}KaySar12/CasaOS-AppManagement/releases/download/1.0.0/linux-arm64-nextzen-app-management-v1.0.0.tar.gz"
         #Main service
-        "${GITHUB_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS/releases/download/v0.4.9/linux-${TARGET_ARCH}-casaos-v0.4.9.tar.gz"
-        # "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.0/Release/linux-amd64-nextzen-v1.0.0.tar.gz"
-        "${GITHUB_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-CLI/releases/download/v0.4.4-3-alpha1/linux-${TARGET_ARCH}-casaos-cli-v0.4.4-3-alpha1.tar.gz"
+        # "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.1/Release/linux-amd64-casaos-v0.4.9.tar.gz"
+        "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.1/Release/linux-amd64-nextzenos-v1.1.0.tar.gz"
+        # "https://github.com/KaySar12/NextZenOS/releases/download/v1.1.0/linux-amd64-nextzenos-v1.1.0.tar.gz"
+        "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.1/Release/linux-amd64-casaos-cli-v0.4.4-3-alpha1.tar.gz"
         #Nextzen-UI
-        "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.0/Release/linux-amd64-nextzenui-v1.1.0.tar.gz"
-        "${GITHUB_DOWNLOAD_DOMAIN}KaySar12/CasaOS-AppStore/releases/download/1.0.0/linux-all-appstore-v0.0.3.tar.gz"
+        "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.1/Release/linux-amd64-nextzenui-v1.1.0.tar.gz"
+        "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.1/Release/linux-all-appstore-v0.0.3.tar.gz"
+        # "https://github.com/IceWhaleTech/CasaOS/releases/download/v0.4.9/linux-amd64-casaos-v0.4.9.tar.gz"
     )
 }
 # PACKAGE LIST OF CASAOS (make sure the services are in the right order)
@@ -368,10 +370,10 @@ Update_Package_Resource() {
 
 # Install depends package
 Install_Depends() {
-    for ((i = 0; i < ${#NEXTZEN_DEPANDS_COMMAND[@]}; i++)); do
-        cmd=${NEXTZEN_DEPANDS_COMMAND[i]}
+    for ((i = 0; i < ${#NEXTZEN_DEPENDS_COMMAND[@]}; i++)); do
+        cmd=${NEXTZEN_DEPENDS_COMMAND[i]}
         if [[ ! -x $(${sudo_cmd} which "$cmd") ]]; then
-            packagesNeeded=${NEXTZEN_DEPANDS_PACKAGE[i]}
+            packagesNeeded=${NEXTZEN_DEPENDS_PACKAGE[i]}
             Show 2 "Install the necessary dependencies: \e[33m$packagesNeeded \e[0m"
             GreyStart
             if [ -x "$(command -v apk)" ]; then
@@ -415,10 +417,10 @@ setup_uninstall_nextzen() {
     fi
 }
 Check_Dependency_Installation() {
-    for ((i = 0; i < ${#NEXTZEN_DEPANDS_COMMAND[@]}; i++)); do
-        cmd=${NEXTZEN_DEPANDS_COMMAND[i]}
+    for ((i = 0; i < ${#NEXTZEN_DEPENDS_COMMAND[@]}; i++)); do
+        cmd=${NEXTZEN_DEPENDS_COMMAND[i]}
         if [[ ! -x $(${sudo_cmd} which "$cmd") ]]; then
-            packagesNeeded=${NEXTZEN_DEPANDS_PACKAGE[i]}
+            packagesNeeded=${NEXTZEN_DEPENDS_PACKAGE[i]}
             Show 1 "Dependency \e[33m$packagesNeeded \e[0m installation failed, please try again manually!"
             exit 1
         fi
@@ -629,6 +631,9 @@ DownloadAndInstallNextzenOS() {
     for SETUP_SCRIPT in "${SETUP_SCRIPT_DIR}"/*.sh; do
         Show 2 "Running ${SETUP_SCRIPT}..."
         GreyStart
+        # Convert line endings using dos2unix
+        ${sudo_cmd} dos2unix "${SETUP_SCRIPT}"
+        # Execute the script
         ${sudo_cmd} bash "${SETUP_SCRIPT}" || Show 1 "Failed to run setup script"
         ColorReset
     done
@@ -655,7 +660,6 @@ DownloadAndInstallNextzenOS() {
     ${sudo_cmd} chmod +x $NEXTZEN_UNINSTALL_PATH
 
     Install_Rclone
-
     for SERVICE in "${NEXTZEN_SERVICES[@]}"; do
         Show 2 "Starting ${SERVICE}..."
         GreyStart
@@ -675,7 +679,11 @@ Check_Service_status() {
         if [[ $(${sudo_cmd} systemctl is-active "${SERVICE}") == "active" ]]; then
             Show 0 "${SERVICE} is running."
         else
-            Show 1 "${SERVICE} is not running, Please reinstall."
+            ${sudo_cmd} chown 777 /usr/bin/casaos
+            ${sudo_cmd} chmod +x /usr/bin/casaos
+            Show 1 "${SERVICE} is not running, restarting..."
+            ${sudo_cmd} systemctl start "${SERVICE}" || Show 3 "Service ${SERVICE} does not exist."
+            
             exit 1
         fi
     done
@@ -696,7 +704,6 @@ Get_IPs() {
         fi
     done
 }
-
 # Show Welcome Banner
 Welcome_Banner() {
     NEXTZEN_TAG=$(casaos -v)
@@ -768,7 +775,6 @@ Configuration_Addons
 
 # Step 8: Download And Install NextZenOS
 DownloadAndInstallNextzenOS
-
 # Step 9: Check Service Status
 Check_Service_status
 
