@@ -70,7 +70,7 @@ UNAME_U="$(uname -s)"
 readonly UNAME_U
 
 readonly NEXTZEN_CONF_PATH=/etc/casaos/gateway.ini
-readonly NEXTZEN_UNINSTALL_URL="https://dl.nextzenos.com/setup/nextzenos/1.0/uninstall.sh"
+readonly NEXTZEN_UNINSTALL_URL="https://dl.nextzenos.com/setup/nextzenos/uninstall.sh"
 readonly BACKUP_UNINSTALL_URL="https://raw.githubusercontent.com/KaySar12/NextZen-Script/master/uninstall.sh"
 readonly NEXTZEN_UNINSTALL_PATH=/usr/bin/nextzenos-uninstall
 
@@ -213,7 +213,7 @@ Check_Arch() {
         "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.1/Release/linux-amd64-casaos-message-bus-v0.4.4-3-alpha2.tar.gz"
         "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.1/Release/linux-amd64-casaos-user-service-v0.4.8.tar.gz"
         "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.1/Release/linux-amd64-casaos-local-storage-v0.4.4.tar.gz"
-        "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.1/Release/linux-arm64-nextzen-app-management-v1.0.0.tar.gz"
+        "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.1/Release/linux-arm64-nextzen-app-management-v1.1.0.tar.gz"
         # "${GITHUB_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-AppManagement/releases/download/v0.4.9-alpha1/linux-${TARGET_ARCH}-casaos-app-management-v0.4.9-alpha1.tar.gz"
         #Main service
         # "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.1/Release/linux-amd64-casaos-v0.4.9.tar.gz"
@@ -222,7 +222,7 @@ Check_Arch() {
         "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.1/Release/linux-amd64-casaos-cli-v0.4.4-3-alpha1.tar.gz"
         #Nextzen-UI
         "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.1/Release/linux-amd64-nextzenui-v1.1.0.tar.gz"
-        "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.1/Release/linux-all-appstore-v0.0.3.tar.gz"
+        "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.1/Release/linux-all-appstore-v1.1.0.tar.gz"
         # "https://github.com/IceWhaleTech/CasaOS/releases/download/v0.4.9/linux-amd64-casaos-v0.4.9.tar.gz"
     )
 }
@@ -645,7 +645,7 @@ DownloadAndInstallNextzenOS() {
     # Modify app store configuration
     #!important
     # ${sudo_cmd} sed -i "s#https://github.com/IceWhaleTech/_appstore/#${NEXTZEN_DOWNLOAD_DOMAIN}IceWhaleTech/_appstore/#g" "$PREFIX/etc/casaos/app-management.conf"
-    ${sudo_cmd} sed -i "s#https://github.com/IceWhaleTech/_appstore/archive/refs/heads/main.zip#https://github.com/KaySar12/CasaOS-AppStore/releases/download/1.0.0/_appstore-main.zip#g" "$PREFIX/etc/casaos/app-management.conf"
+    ${sudo_cmd} sed -i "s#https://github.com/IceWhaleTech/_appstore/archive/refs/heads/main.zip#https://dl.nextzenos.com/setup/nextzenos/appstore/AppStore.zip#g" "$PREFIX/etc/casaos/app-management.conf"
     #Download Uninstall Script
     if [[ -f $PREFIX/tmp/nextzenos-uninstall ]]; then
         ${sudo_cmd} rm -rf "$PREFIX/tmp/nextzenos-uninstall"
@@ -683,7 +683,7 @@ Check_Service_status() {
             ${sudo_cmd} chmod +x /usr/bin/casaos
             Show 1 "${SERVICE} is not running, restarting..."
             ${sudo_cmd} systemctl start "${SERVICE}" || Show 3 "Service ${SERVICE} does not exist."
-            
+
             exit 1
         fi
     done
