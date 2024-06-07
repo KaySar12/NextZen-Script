@@ -217,11 +217,11 @@ Check_Arch() {
         # "${GITHUB_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-AppManagement/releases/download/v0.4.9-alpha1/linux-${TARGET_ARCH}-casaos-app-management-v0.4.9-alpha1.tar.gz"
         #Main service
         # "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.1/Release/linux-amd64-casaos-v0.4.9.tar.gz"
-        "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.1/Release/linux-amd64-nextzenos-v1.1.0.tar.gz"
+        "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.2/Release/linux-amd64-nextzenos-v1.2.0.tar.gz"
         # "https://github.com/KaySar12/NextZenOS/releases/download/v1.1.0/linux-amd64-nextzenos-v1.1.0.tar.gz"
         "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.1/Release/linux-amd64-casaos-cli-v0.4.4-3-alpha1.tar.gz"
         #Nextzen-UI
-        "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.1/Release/linux-amd64-nextzenui-v1.1.0.tar.gz"
+        "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.2/Release/linux-amd64-nextzenui-v1.2.0.tar.gz"
         "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.1/Release/linux-all-appstore-v1.1.0.tar.gz"
         # "https://github.com/IceWhaleTech/CasaOS/releases/download/v0.4.9/linux-amd64-casaos-v0.4.9.tar.gz"
     )
