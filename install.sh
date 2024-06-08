@@ -213,7 +213,8 @@ Check_Arch() {
         "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.2/Release/linux-amd64-nextzenos-message-bus-v0.4.4-3-alpha2.tar.gz"
         "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.2/Release/linux-amd64-nextzenos-user-service-v0.4.8.tar.gz"
         "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.2/Release/linux-amd64-nextzenos-local-storage-v0.4.4.tar.gz"
-        "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.2/Release/linux-arm64-nextzen-app-management-v1.1.0.tar.gz"
+        "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.2/Release/linux-arm64-nextzen-app-management-v1.2.0.tar.gz"
+        # "${GITHUB_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-AppManagement/releases/download/v0.4.9-alpha1/linux-${TARGET_ARCH}-casaos-app-management-v0.4.9-alpha1.tar.gz"
         # "${GITHUB_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-AppManagement/releases/download/v0.4.9-alpha1/linux-${TARGET_ARCH}-casaos-app-management-v0.4.9-alpha1.tar.gz"
         #Main service
         # "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.1/Release/linux-amd64-casaos-v0.4.9.tar.gz"
@@ -627,13 +628,13 @@ DownloadAndInstallNextzenOS() {
     ColorReset
 
     SETUP_SCRIPT_DIR=$(realpath -e "${BUILD_DIR}"/scripts/setup/script.d || Show 1 "Failed to find setup script directory")
-
+    # Ensure all.sh scripts in SETUP_SCRIPT_DIR and subdirectories have execution permissions
+    ${sudo_cmd} chmod -R +x "${BUILD_DIR}"/scripts
     for SETUP_SCRIPT in "${SETUP_SCRIPT_DIR}"/*.sh; do
         Show 2 "Running ${SETUP_SCRIPT}..."
         GreyStart
         # Convert line endings using dos2unix
         ${sudo_cmd} dos2unix "${SETUP_SCRIPT}"
-        # Execute the script
         ${sudo_cmd} bash "${SETUP_SCRIPT}" || Show 1 "Failed to run setup script"
         ColorReset
     done
