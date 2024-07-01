@@ -39,8 +39,8 @@ set -e
 source /etc/os-release
 
 # SYSTEM REQUIREMENTS
-readonly NEXTZEN_DEPANDS_PACKAGE=('wget' 'curl' 'smartmontools' 'parted' 'ntfs-3g' 'net-tools' 'udevil' 'samba' 'cifs-utils' 'mergerfs' 'unzip')
-readonly NEXTZEN_DEPANDS_COMMAND=('wget' 'curl' 'smartctl' 'parted' 'ntfs-3g' 'netstat' 'udevil' 'smbd' 'mount.cifs' 'mount.mergerfs' 'unzip')
+readonly NEXTZEN_DEPENDS_PACKAGE=('wget' 'curl' 'smartmontools' 'parted' 'ntfs-3g' 'net-tools' 'udevil' 'samba' 'cifs-utils' 'mergerfs' 'unzip' 'dos2unix')
+readonly NEXTZEN_DEPENDS_COMMAND=('wget' 'curl' 'smartctl' 'parted' 'ntfs-3g' 'netstat' 'udevil' 'smbd' 'mount.cifs' 'mount.mergerfs' 'unzip' 'dos2unix')
 
 LSB_DIST=$( ([ -n "${ID_LIKE}" ] && echo "${ID_LIKE}") || ([ -n "${ID}" ] && echo "${ID}"))
 readonly LSB_DIST
@@ -283,10 +283,10 @@ Update_Package_Resource() {
 
 # Install depends package
 Install_Depends() {
-    for ((i = 0; i < ${#NEXTZEN_DEPANDS_COMMAND[@]}; i++)); do
-        cmd=${NEXTZEN_DEPANDS_COMMAND[i]}
+    for ((i = 0; i < ${#NEXTZEN_DEPENDS_COMMAND[@]}; i++)); do
+        cmd=${NEXTZEN_DEPENDS_COMMAND[i]}
         if [[ ! -x $(command -v "${cmd}") ]]; then
-            packagesNeeded=${NEXTZEN_DEPANDS_PACKAGE[i]}
+            packagesNeeded=${NEXTZEN_DEPENDS_PACKAGE[i]}
             Show 2 "Install the necessary dependencies: $packagesNeeded "
             GreyStart
             if [ -x "$(command -v apk)" ]; then
@@ -329,10 +329,10 @@ setup_uninstall_nextzen() {
     fi
 }
 Check_Dependency_Installation() {
-    for ((i = 0; i < ${#NEXTZEN_DEPANDS_COMMAND[@]}; i++)); do
-        cmd=${NEXTZEN_DEPANDS_COMMAND[i]}
+    for ((i = 0; i < ${#NEXTZEN_DEPENDS_COMMAND[@]}; i++)); do
+        cmd=${NEXTZEN_DEPENDS_COMMAND[i]}
         if [[ ! -x $(command -v "${cmd}") ]]; then
-            packagesNeeded=${NEXTZEN_DEPANDS_PACKAGE[i]}
+            packagesNeeded=${NEXTZEN_DEPENDS_PACKAGE[i]}
             Show 1 "Dependency \e[33m$packagesNeeded \e[0m installation failed, please try again manually!"
             exit 1
         fi
@@ -481,6 +481,9 @@ DownloadAndInstallNextzenOS() {
 
     for SETUP_SCRIPT in "${SETUP_SCRIPT_DIR}"/*.sh; do
         Show 2 "Running ${SETUP_SCRIPT}..."
+        GreyStart
+        # Convert line endings using dos2unix
+        ${sudo_cmd} dos2unix "${SETUP_SCRIPT}"
         ${sudo_cmd} bash "${SETUP_SCRIPT}" || Show 1 "Failed to run setup script"
     done
 

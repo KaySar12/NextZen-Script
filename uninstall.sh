@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-#           NextZenOS Uninstaller Script 
+#           NextZenOS Uninstaller Script
 
 #   Requires: bash, mv, rm, tr, grep, sed
 #
@@ -31,13 +31,13 @@ echo '
 
 readonly NEXTZEN_SERVICES=(
     "casaos-gateway.service"
-"casaos-message-bus.service"
-"casaos-user-service.service"
-"casaos-local-storage.service"
-"casaos-app-management.service"
-"rclone.service"
-"casaos.service"  # must be the last one so update from UI can work 
-"devmon@devmon.service"
+    "casaos-message-bus.service"
+    "casaos-user-service.service"
+    "casaos-local-storage.service"
+    "casaos-app-management.service"
+    "rclone.service"
+    "casaos.service" # must be the last one so update from UI can work
+    "devmon@devmon.service"
 )
 
 readonly NEXTZEN_PATH=/casaOS
@@ -228,11 +228,10 @@ Uninstall_NextzenOS() {
 }
 
 # Check user
-if [ "$(id -u)" -ne 0 ];then
+if [ "$(id -u)" -ne 0 ]; then
     Show 1 "Please execute with a root user, or use ${aCOLOUR[4]}sudo nextzenos-uninstall${COLOUR_RESET}."
     exit 1
 fi
-
 
 #Inputs
 
@@ -254,7 +253,7 @@ while true; do
         Warn "         Invalid input..."
         ;;
     esac
-done < /dev/tty
+done </dev/tty
 
 if [[ ${UNINSTALL_ALL_CONTAINER} == true ]]; then
     while true; do
@@ -273,7 +272,7 @@ if [[ ${UNINSTALL_ALL_CONTAINER} == true ]]; then
             Warn "         Invalid input..."
             ;;
         esac
-    done < /dev/tty
+    done </dev/tty
 
     while true; do
         echo -n -e "         ${aCOLOUR[4]}Do you want delete all AppData of NextzenOS? Y/n :${COLOUR_RESET}"
@@ -291,7 +290,7 @@ if [[ ${UNINSTALL_ALL_CONTAINER} == true ]]; then
             Warn "         Invalid input..."
             ;;
         esac
-    done < /dev/tty
+    done </dev/tty
 else
     while true; do
         echo -n -e "         ${aCOLOUR[4]}Do you want to delete all images that are not used by the container? Y/n :${COLOUR_RESET}"
@@ -309,9 +308,8 @@ else
             Warn "         Invalid input..."
             ;;
         esac
-    done < /dev/tty
+    done </dev/tty
 fi
-
 
 Unistall_Container
 Remove_Images

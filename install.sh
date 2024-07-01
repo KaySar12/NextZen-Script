@@ -97,7 +97,6 @@ readonly GREEN_SEPARATOR="${aCOLOUR[0]}:$COLOUR_RESET"
 TARGET_ARCH=""
 TMP_ROOT=/tmp/casaos-installer
 REGION="UNKNOWN"
-GITHUB_DOWNLOAD_DOMAIN="https://github.com/"
 NEXTZEN_DOWNLOAD_DOMAIN="https://dl.nextzenos.com/"
 trap 'onCtrlC' INT
 onCtrlC() {
@@ -646,7 +645,7 @@ DownloadAndInstallNextzenOS() {
     # Modify app store configuration
     #!important
     # ${sudo_cmd} sed -i "s#https://github.com/IceWhaleTech/_appstore/#${NEXTZEN_DOWNLOAD_DOMAIN}IceWhaleTech/_appstore/#g" "$PREFIX/etc/casaos/app-management.conf"
-    ${sudo_cmd} sed -i "s#https://github.com/IceWhaleTech/_appstore/archive/refs/heads/main.zip#https://dl.nextzenos.com/setup/nextzenos/appstore/AppStore.zip#g" "$PREFIX/etc/casaos/app-management.conf"
+    ${sudo_cmd} sed -i "s#https://casaos.app/store/main.zip#https://dl.nextzenos.com/setup/nextzenos/appstore/AppStore.zip#g" "$PREFIX/etc/casaos/app-management.conf"
     #Download Uninstall Script
     if [[ -f $PREFIX/tmp/nextzenos-uninstall ]]; then
         ${sudo_cmd} rm -rf "$PREFIX/tmp/nextzenos-uninstall"
