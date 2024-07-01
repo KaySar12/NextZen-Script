@@ -134,6 +134,8 @@ Show() {
     # NOTICE
     elif (($1 == 3)); then
         echo -e "- NOTICE $2" | ${sudo_cmd} tee -a /var/log/casaos/upgrade.log
+    elif (($1 == 4)); then
+        echo -e "- DEBUG $2" | ${sudo_cmd} tee -a /var/log/casaos/upgrade.log
     fi
 }
 
@@ -194,20 +196,20 @@ Check_Arch() {
     esac
     Show 0 "Your hardware architecture is : $UNAME_M"
     NEXTZEN_PACKAGES=(
-        "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.1/Release/linux-amd64-casaos-gateway-v0.4.8-alpha2.tar.gz"
-        "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.1/Release/linux-amd64-casaos-message-bus-v0.4.4-3-alpha2.tar.gz"
-        "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.1/Release/linux-amd64-casaos-user-service-v0.4.8.tar.gz"
-        "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.1/Release/linux-amd64-casaos-local-storage-v0.4.4.tar.gz"
-        "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.1/Release/linux-arm64-nextzen-app-management-v1.1.0.tar.gz"
+        "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.3/Release/linux-amd64-nextzenos-gateway-v0.4.8-alpha2.tar.gz"
+        "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.3/Release/linux-amd64-nextzenos-message-bus-v0.4.4-3-alpha2.tar.gz"
+        "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.3/Release/linux-amd64-nextzenos-user-service-v1.3.0.tar.gz"
+        "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.3/Release/linux-amd64-nextzenos-local-storage-v0.4.4.tar.gz"
+        "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.3/Release/linux-arm64-nextzen-app-management-v1.1.0.tar.gz"
         # "${GITHUB_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-AppManagement/releases/download/v0.4.9-alpha1/linux-${TARGET_ARCH}-casaos-app-management-v0.4.9-alpha1.tar.gz"
         #Main service
         # "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.1/Release/linux-amd64-casaos-v0.4.9.tar.gz"
-        "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.2/Release/linux-amd64-nextzenos-v1.2.0.tar.gz"
+        "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.3/Release/linux-amd64-nextzenos-v1.3.0.tar.gz"
         # "https://github.com/KaySar12/NextZenOS/releases/download/v1.1.0/linux-amd64-nextzenos-v1.1.0.tar.gz"
-        "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.1/Release/linux-amd64-casaos-cli-v0.4.4-3-alpha1.tar.gz"
+        "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.3/Release/linux-amd64-nextzenos-cli-v0.4.4-3-alpha1.tar.gz"
         #Nextzen-UI
-        "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.2/Release/linux-amd64-nextzenui-v1.2.0.tar.gz"
-        "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.1/Release/linux-all-appstore-v1.1.0.tar.gz"
+        "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.3/Release/linux-amd64-nextzenui-v1.3.0.tar.gz"
+        "${NEXTZEN_DOWNLOAD_DOMAIN}setup/nextzenos/1.3/Release/linux-all-appstore-v1.1.0.tar.gz"
         # "https://github.com/IceWhaleTech/CasaOS/releases/download/v0.4.9/linux-amd64-casaos-v0.4.9.tar.gz"
     )
 }
@@ -341,7 +343,7 @@ Check_Dependency_Installation() {
 
 #Install Rclone
 Install_rclone_from_source() {
-    ${sudo_cmd} wget -qO ./install.sh https://rclone.org/install.sh
+    Show 4 ${sudo_cmd} wget -qO ./install.sh https://rclone.org/install.sh
     if [[ "${REGION}" = "China" ]] || [[ "${REGION}" = "CN" ]]; then
         sed -i 's/downloads.rclone.org/casaos.oss-cn-shanghai.aliyuncs.com/g' ./install.sh
     else
@@ -377,7 +379,7 @@ Install_Rclone() {
     else
         Install_rclone_from_source
     fi
-    ${sudo_cmd} systemctl enable rclone || Show 3 "Service rclone does not exist."
+    Show 4 ${sudo_cmd} systemctl enable rclone || Show 3 "Service rclone does not exist."
 }
 
 #Configuration Addons
@@ -441,7 +443,8 @@ DownloadAndInstallNextzenOS() {
             Show 2 "Extracting ${PACKAGE_FILE}..."
             ${sudo_cmd} tar zxf "${PACKAGE_FILE}" || Show 1 "Failed to extract package"
         done
-
+        ${sudo_cmd} chmod -R u+x ${TMP_ROOT}
+        ${sudo_cmd} chown -R $USER:$USER ${TMP_ROOT}
         BUILD_DIR=$(realpath -e "${TMP_DIR}"/build || Show 1 "Failed to find build directory")
 
         popd
@@ -453,14 +456,13 @@ DownloadAndInstallNextzenOS() {
     #   systemctl stop "${SERVICE}" || Show 3 "Service ${SERVICE} does not exist."
 
     # done
-
+    ${sudo_cmd} chmod -R u+x "${BUILD_DIR}"
     MIGRATION_SCRIPT_DIR=$(realpath -e "${BUILD_DIR}"/scripts/migration/script.d || Show 1 "Failed to find migration script directory")
-
     for MIGRATION_SCRIPT in "${MIGRATION_SCRIPT_DIR}"/*.sh; do
         Show 2 "Running ${MIGRATION_SCRIPT}..."
-
+        ${sudo_cmd} chmod -R u+x ${MIGRATION_SCRIPT}
         ${sudo_cmd} bash "${MIGRATION_SCRIPT}" || Show 1 "Failed to run migration script"
-
+        ColorReset
     done
 
     Show 2 "Installing NextzenOS..."
