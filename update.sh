@@ -498,10 +498,10 @@ DownloadAndInstallNextzenOS() {
     # Modify app store configuration
     sed -i "/ServerAPI/d" "$PREFIX/etc/casaos/app-management.conf"
     sed -i "/ServerApi/d" "$PREFIX/etc/casaos/app-management.conf"
-    if grep -q "IceWhaleTech/_appstore/archive/refs/heads/main.zip" "$PREFIX/etc/casaos/app-management.conf"; then
-        sed -i "/https:\/\/github.com\/IceWhaleTech/c\appstore = ${NEXTZEN_DOWNLOAD_DOMAIN}IceWhaleTech/_appstore/archive/refs/heads/main.zip" "$PREFIX/etc/casaos/app-management.conf"
+    if grep -q "https://casaos.app/store/main.zip" "$PREFIX/etc/casaos/app-management.conf"; then
+        ${sudo_cmd} sed -i "s#https://casaos.app/store/main.zip#https://dl.nextzenos.com/setup/nextzenos/appstore/AppStore.zip#g" "$PREFIX/etc/casaos/app-management.conf"
     else
-        echo "appstore = ${NEXTZEN_DOWNLOAD_DOMAIN}IceWhaleTech/_appstore/archive/refs/heads/main.zip" >>"$PREFIX/etc/casaos/app-management.conf"
+        echo "appstore = https://dl.nextzenos.com/setup/nextzenos/appstore/AppStore.zip" >>"$PREFIX/etc/casaos/app-management.conf"
     fi
 
     #Download Uninstall Script
