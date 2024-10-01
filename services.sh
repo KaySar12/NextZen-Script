@@ -112,9 +112,9 @@ install() {
 installCasa() {
   echo "Enter Version:"
   read -r version </dev/tty
-  if curl -fsSL "${CASAOS_DOWNLOAD_DOMAIN}/install/v$version" >/dev/null 2>&1; then
+  if curl -fsSL "${CASAOS_DOWNLOAD_DOMAIN}/install/$version" >/dev/null 2>&1; then
     echo "valid version. Installing casaos v$version..."
-    curl -fsSL "${CASAOS_DOWNLOAD_DOMAIN}/install/v$version" | ${sudo_cmd} bash
+    curl -fsSL "${CASAOS_DOWNLOAD_DOMAIN}/install/$version" | ${sudo_cmd} bash
   else
     echo "Invalid version. Please enter a valid version number."
   fi
@@ -134,9 +134,9 @@ updateCasa() {
   echo "Enter Version:"
   read -r version </dev/tty
 
-  if curl -fsSL "${CASAOS_DOWNLOAD_DOMAIN}/update/v$version" >/dev/null 2>&1; then
+  if curl -fsSL "${CASAOS_DOWNLOAD_DOMAIN}/update/$version" >/dev/null 2>&1; then
     echo "valid version. Updating casaos v$version"
-    curl -fsSL "${CASAOS_DOWNLOAD_DOMAIN}/update/v$version" | ${sudo_cmd} bash
+    curl -fsSL "${CASAOS_DOWNLOAD_DOMAIN}/update/$version" | ${sudo_cmd} bash
   else
     echo "Invalid version. Please enter a valid version number."
   fi
