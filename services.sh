@@ -88,9 +88,17 @@ startOne() {
   main
 }
 listen() {
-  echo Port Listen:
+  echo "Port Listen:"
   read -r port </dev/tty
-  ${sudo_cmd} $HOME/go/bin/dlv dap --listen=: $port --only-same-user=false || Show 3 "Error Port"
+
+  # Find the dlv executable dynamically
+  dlv_path=$(which dlv)
+  if [[ -z "$dlv_path" ]]; then
+    Show 3 "Error: dlv not found in PATH"
+    return 1
+  fi
+
+  ${sudo_cmd} "$dlv_path" dap --listen=:$port --only-same-user=false || Show 3 "Error Port"
   main
 }
 reload() {
